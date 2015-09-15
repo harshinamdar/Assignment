@@ -12,8 +12,8 @@
 
 ##### Comparing reads simulated vs reads aligned
     
-      `/apps/bedtools/2.4.2/BEDTools/bin/bamToBed -i readSNV.bam|awk '{print$1,"\t",$2,"\t",$3,"\t",$6}' >readSNV.bed`
+      `\/apps/bedtools/2.4.2/BEDTools/bin/bamToBed -i readSNV.bam|awk '{print$1,"\t",$2,"\t",$3,"\t",$6}' >readSNV.bed`
       `grep -v '-' readSNV.bed >tmp.bed && mv tmp.bed readSNV.bed` ## remove reads mapped to -ve strand
-      `/apps/bedtools/2.4.2/BEDTools/bin/intersectBed -u -f 0.075 -a pos.bed -b readSNV.bed |wc -l` ##no. of overlapped reads  min overlap 75%
-     `/apps/bedtools/2.4.2/BEDTools/bin/intersectBed -v  -a pos.bed -b readSNV.bed |wc -l` ## reads aligned to different position than simulated from
+      `\/apps/bedtools/2.4.2/BEDTools/bin/intersectBed -u -f 0.075 -a pos.bed -b readSNV.bed |wc -l` ##no. of overlapped reads  min overlap 75%
+     `\/apps/bedtools/2.4.2/BEDTools/bin/intersectBed -v  -a pos.bed -b readSNV.bed |wc -l` ## reads aligned to different position than simulated from
 
