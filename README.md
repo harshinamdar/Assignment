@@ -5,10 +5,10 @@
 
 ### Generate Alignment and comapre
 - Run the following commands :
-    
-     bwa aln -t 8 ref/1.fa readSNV.fq > readSNV.sai
-     bwa samse ref/1.fa readSNV.sai readSNV.fq > readSNV.sam
-     samtools view -bT ref/1.fa readSNV.sam > readSNV.bam
+
+      bwa aln -t 8 ref/1.fa readSNV.fq > readSNV.sai
+      bwa samse ref/1.fa readSNV.sai readSNV.fq > readSNV.sam
+      samtools view -bT ref/1.fa readSNV.sam > readSNV.bam
 
 ##Comparing reads simulated vs reads aligned
     
