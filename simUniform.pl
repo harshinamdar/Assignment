@@ -123,7 +123,7 @@ sub randomSub {
 
 =head1 SYNOPSIS
 
-perl sim.pl [options]
+perl simUniform.pl [options]
 
   Options:
 
@@ -133,7 +133,7 @@ perl sim.pl [options]
    --error_rate
    
    Example:
-        perl sim.pl --genome_fasta genome.fa --read_length 50 --read_number 100000 --error_rate 0.01
+        perl simUniform.pl --genome_fasta genome.fa --read_length 50 --read_number 100000 --error_rate 0.01
 
 =head1 DESCRIPTION
 
