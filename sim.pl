@@ -79,10 +79,10 @@ sub randomNUM {
     my ($j,$k)= @_;
     my @arrRND;
     for (my $i=0;$i<$j;$i++){
-    my $ranNUM = int(rand($k));	
-    push @arrRND,$ranNUM;
+         my $ranNUM = int(rand($k));	
+         push @arrRND,$ranNUM;
     }
-    return \@arrRND;
+         return \@arrRND;
 }
 
 ##Subroutine to return random substitue base: eg. if 'A' then return T or G or C
