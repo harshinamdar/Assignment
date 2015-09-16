@@ -49,7 +49,7 @@ my $snv = $read_number * $read_length * $error_rate;
 my %bins;
 my $bin_size = $snv/$read_length; 
 my $bin_counter = 0;
-for (my $i=0; $i < $snv; $i+=$bin_size){    #$i<error rate * total bases simulated = 0.01 x 500000
+for (my $i=0; $i < $snv; $i+=$bin_size){
         my $x=$i+1;
         my $y=$i+$bin_size;
 #       print "$x\n";
