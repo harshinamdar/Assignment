@@ -23,17 +23,17 @@ pod2usage(-verbose => 1)  if ($help);
                   }
 
 open (my $infile,"<",$genome_fasta)|| die "can't open file: $!";
-local $/ = "\n>";  # read by FASTA record
+local $/ = "\n>";  #read by FASTA record
 my $Sequence;
 my $basecount;
 while (my$seq_chunk = <$infile>) {
        chomp $seq_chunk;
-       $seq_chunk =~ s/^>*.+\n//;# remove FASTA header
-       $seq_chunk =~ s/\n//g;  # remove endlines
+       $seq_chunk =~ s/^>*.+\n//; #remove FASTA header
+       $seq_chunk =~ s/\n//g;  #remove endlines
        $Sequence.=$seq_chunk;
       }
 close($infile);
-$basecount=length($Sequence)-$read_length;# -$read_length: to restrict max rand position and allow last bases to be simulated.
+$basecount=length($Sequence)-$read_length; #-$read_length: to restrict max rand position and allow last bases to be simulated.
 
 my @ranPOS = @{randomNUM($read_number,$basecount)};
 open (my $outfile,">","pos.bed")||die "can't open $!";
@@ -56,7 +56,7 @@ foreach my $pos(@ranPOS){
             my $val =int (($fasta_counter-1) / $bin_size);
             my $nuc = substr($fasta,$val,1);
             substr($fasta,$val,1,randomSub($nuc));
-           # print  $fasta_counter.":".$fasta,"#########Mutated\n";
+           #print  $fasta_counter.":".$fasta,"#########Mutated\n";
             print $outfile2 "\@HISEQ:".$fasta_counter.":".$pos."#0/1","\n";
             print $outfile2 $fasta,"\n";
             print $outfile2 "+", "\n";
@@ -64,7 +64,7 @@ foreach my $pos(@ranPOS){
             }
                     
         else { 
-           # print $fasta_counter.":".$fasta,"=========NON_Mutated\n";
+           #print $fasta_counter.":".$fasta,"=========NON_Mutated\n";
              print $outfile2 "\@HISEQ:".$fasta_counter.":".$pos."#0/1","\n";
              print $outfile2 $fasta,"\n";
              print $outfile2 "+", "\n";
