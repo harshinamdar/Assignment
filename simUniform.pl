@@ -28,68 +28,48 @@ my $Sequence;
 my $basecount;
 while (my$seq_chunk = <$infile>) {
        chomp $seq_chunk;
-       $seq_chunk =~ s/^>*.+\n//;  # remove FASTA header
+       $seq_chunk =~ s/^>*.+\n//;# remove FASTA header
        $seq_chunk =~ s/\n//g;  # remove endlines
        $Sequence.=$seq_chunk;
       }
 close($infile);
-my $A=$Sequence=~tr/A/A/;
-my $G=$Sequence=~tr/G/G/;
-my $T=$Sequence=~tr/T/T/;
-my $C=$Sequence=~tr/C/C/;
-my $N=$Sequence=~tr/N/N/;
-$basecount=($A+$G+$T+$C+$N)-$read_length; # -$read_length: to restrict max rand position and allow last bases to be simulated.
-
+$basecount=length($Sequence)-$read_length;# -$read_length: to restrict max rand position and allow last bases to be simulated.
 
 my @ranPOS = @{randomNUM($read_number,$basecount)};
 open (my $outfile,">","pos.bed")||die "can't open $!";
 open (my $outfile1,">","read.fq")||die "can't open $!";
-open (my $outfile2,">","readSNV.fq")||die "can't open $!";	
+open (my $outfile2,">","readSNV.fq")||die "can't open $!";
 my $snv = $read_number * $read_length * $error_rate;
-my %bins;
 my $bin_size = $snv/$read_length; 
-my $bin_counter = 0;
-for (my $i=0; $i < $snv; $i+=$bin_size){    #$i<error rate * total bases simulated = 0.01 x 500000
-        my $x=$i+1;
-        my $y=$i+$bin_size;
-#       print "$x\n";
-        my $key=$x."_".$y;
-        my $value=$bin_counter++;
-        $bins{$key}=$value;
-        }
 
 my $fasta_counter = 0;
 foreach my $pos(@ranPOS){
         print $outfile "1","\t",$pos,"\t",$pos+50,"\t","+","\n";
         my $fasta=substr($Sequence,$pos,$read_length);
         $fasta_counter++;
-       #print $fasta_counter.":".$fasta,"=========NON_Mutated\n";
+        #print $fasta_counter.":".$fasta,"=========NON_Mutated\n";
         print $outfile1 "\@HISEQ:".$fasta_counter.":".$pos."#0/1","\n";
         print $outfile1 $fasta,"\n";
         print $outfile1 "+", "\n";
         print $outfile1 "?" x $read_length,"\n";
         if ($fasta_counter <= $snv){
-            foreach my $bin (keys %bins){
-            my ($start,$end) =split(/_/,$bin);
-            my $val = $bins{$bin};
-            if ($fasta_counter >= $start and $fasta_counter<=$end) {
-                my $nuc = substr($fasta,$val,1);
-                substr($fasta,$val,1,randomSub($nuc));
-               #print  $fasta_counter.":".$fasta,"#########Mutated\n";
-                print $outfile2 "\@HISEQ:".$fasta_counter.":".$pos."#0/1","\n";
-                print $outfile2 $fasta,"\n";
-                print $outfile2 "+", "\n";
-                print $outfile2 "?" x $read_length,"\n";
-                }
-             }
-        }
+            my $val =int (($fasta_counter-1) / $bin_size);
+            my $nuc = substr($fasta,$val,1);
+            substr($fasta,$val,1,randomSub($nuc));
+           # print  $fasta_counter.":".$fasta,"#########Mutated\n";
+            print $outfile2 "\@HISEQ:".$fasta_counter.":".$pos."#0/1","\n";
+            print $outfile2 $fasta,"\n";
+            print $outfile2 "+", "\n";
+            print $outfile2 "?" x $read_length,"\n";
+            }
+                    
         else { 
-            #print $fasta_counter.":".$fasta,"=========NON_Mutated\n";
+           # print $fasta_counter.":".$fasta,"=========NON_Mutated\n";
              print $outfile2 "\@HISEQ:".$fasta_counter.":".$pos."#0/1","\n";
              print $outfile2 $fasta,"\n";
              print $outfile2 "+", "\n";
              print $outfile2 "?" x $read_length,"\n";
-        }
+             }
 }
 close ($outfile);
 close ($outfile1);
@@ -101,7 +81,7 @@ sub randomNUM {
     my ($j,$k)= @_;
     my @arrRND;
     for (my $i=0;$i<$j;$i++){
-    my $ranNUM = int(rand($k));	
+    my $ranNUM = int(rand($k));
     push @arrRND,$ranNUM;
     }
     return \@arrRND;
@@ -170,4 +150,3 @@ Provide rate of mutation to be introduced in simulated reads
 This program is free software and can redistributed and/or modified.
 
 =cut
-
